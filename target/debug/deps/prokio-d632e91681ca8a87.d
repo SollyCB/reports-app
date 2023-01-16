@@ -1,0 +1,13 @@
+/home/solly/code/rust/reports-app/target/debug/deps/prokio-d632e91681ca8a87.rmeta: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/fmt/mod.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/fmt/buffer.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/pinned.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/time.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/mod.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/time.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/local_worker.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/runtime.rs
+
+/home/solly/code/rust/reports-app/target/debug/deps/prokio-d632e91681ca8a87.d: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/fmt/mod.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/fmt/buffer.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/pinned.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/time.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/mod.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/time.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/local_worker.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/runtime.rs
+
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/lib.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/fmt/mod.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/fmt/buffer.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/pinned.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/time.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/mod.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/time.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/rt_tokio/local_worker.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/prokio-0.1.0/src/runtime.rs:

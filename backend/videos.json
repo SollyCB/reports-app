@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "title": "Building and breaking things",
+        "speaker": "John Doe",
+        "url": "https://youtu.be/PsaFVLr8t4E",
+        "thumbnail": "https://ichef.bbci.co.uk/news/976/cpsprodpb/6585/production/_114798952_gettyimages-1278848449.jpg"
+    },
+    {
+        "id": 2,
+        "title": "The development process",
+        "speaker": "Jane Smith",
+        "url": "https://youtu.be/PsaFVLr8t4E",
+        "thumbnail": "https://media.npr.org/assets/img/2020/10/09/gettyimages-1278849926_wide-39d26e44c7eff0602334e77a56d5a9d3b88b6ad3-s1100-c50.jpg"
+    },
+    {
+        "id": 3,
+        "title": "The Web 7.0",
+        "speaker": "Matt Miller",
+        "url": "https://youtu.be/PsaFVLr8t4E",
+        "thumbnail": "None"
+    },
+    {
+        "id": 4,
+        "title": "Mouseless development",
+        "speaker": "Tom Jerry",
+        "url": "https://youtu.be/PsaFVLr8t4E",
+        "thumbnail": "None"
+    }
+]

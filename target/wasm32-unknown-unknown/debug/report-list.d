@@ -1,0 +1,1 @@
+/home/solly/code/rust/reports-app/target/wasm32-unknown-unknown/debug/report-list.wasm: /home/solly/code/rust/reports-app/frontend/src/lib.rs /home/solly/code/rust/reports-app/frontend/src/main.rs /home/solly/code/rust/reports-app/frontend/src/report_box.rs
