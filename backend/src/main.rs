@@ -1,50 +1,44 @@
-use std::{
-    fs,
-    io::{ prelude::*, BufReader },
-    net::{ TcpListener, TcpStream },
+use tokio::{
+    io::Result,
+    net::{ TcpListener, TcpStream},
 };
-use server_1::ThreadPool;
+use backend::Connection;
 
-fn main() {
-    let ip = "127.0.0.1:9001";
-    println!("Connected to: {ip}");
-    let listener = TcpListener::bind(ip).unwrap();
+#[tokio::main]
+async fn main() -> Result<()> {
+    let ip = "127.0.0.1:9000";
 
-    let pool = ThreadPool::build(4).unwrap();
+    let listener = TcpListener::bind(ip).await.expect("Listener Failed to Bind"); 
+    println!("Connected to: {}", ip);
 
-    for stream in listener.incoming().take(20) {
-        let stream = stream.unwrap();
+    loop {
+        let (socket, ip) = match listener.accept().await {
+            Ok((socket, ip)) => (socket, ip),
+            Err(_) => {
+                continue
+            }
+        };
 
-        pool.execute(|| handle_connection(stream) );
+        println!("{} Connected...", ip);
+
+        tokio::spawn(async move {
+            handle_connection(socket).await;
+        });
     }
 }
 
-fn handle_connection(mut stream: TcpStream) {
-    let buf_reader = BufReader::new(&mut stream);
-    let request_line = buf_reader.lines().next().unwrap().unwrap();
+async fn handle_connection(stream: TcpStream) {
 
-    let (status_line, filename, content_type) = match request_line.as_ref() {
-        "GET /api/report-demo.json HTTP/1.1" => {
-            //println!("WORKING");
-            ("HTTP/1.1 200 OK", "report-demo.json", "application/json")
-        }
-        "GET /api/jenny-report.json HTTP/1.1" => {
-            //println!("WORKING");
-            ("HTTP/1.1 200 OK", "jenny-report.json", "application/json")
-        }
-        "GET /api/jenny-photo.jpg HTTP/1.1" => {
-            //println!("Got Jenny");
-            ("HTTP/1.1 200 OK", "jenny-photo.jpg", "image/jpeg")
-        }
-        _ => {
-            //println!("DOESNT");
-            ("HTTP/1.1 404 Not Found", "404.html", "")
-        }
-    };
-    let file = fs::read(filename).unwrap();
-    let length = file.len();
+    println!("Got Task! Executing...");
+    let mut request = Connection::new(stream).await.read_connection().await.expect("Parsnips!!").build_request().await.expect("HUUUUHHH?");
 
-    let response = format!("{status_line}\r\nContent-Length: {length}\r\nContent-Type: {content_type}\r\n\r\n");
-    let bytes: Vec<u8> = [response.as_bytes(), &file].concat();
-    stream.write_all(&bytes).unwrap();
+    let body = request.body();
+    let headers = request.headers();
+    request.write().await.unwrap();
+    println!("Body: {:?},\nLen: {:?}", body, body.len());
+    println!("Headers: {:?}", headers);
+
+    // if Err { serve <CorrespondingErr>_page}
+    //      else { carry on... }
+
 }
