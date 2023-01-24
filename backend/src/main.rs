@@ -30,14 +30,10 @@ async fn main() -> Result<()> {
 async fn handle_connection(stream: TcpStream) {
 
     println!("Got Task! Executing...");
-    let mut request = Connection::new(stream).await.read_connection().await.expect("Parsnips!!").build_request().await.expect("HUUUUHHH?");
+    let mut request = Connection::new(stream).await.read_connection().await.expect("Unwrapping connection in main")
+        .build_request().await.expect("Unwrapping request in main");
 
-    let body = request.body();
-    let headers = request.headers();
     request.write().await.unwrap();
-    println!("Body: {:?},\nLen: {:?}", body, body.len());
-    println!("Headers: {:?}", headers);
-
     // if Err { serve <CorrespondingErr>_page}
     //      else { carry on... }
 

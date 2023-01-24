@@ -4,9 +4,17 @@ use tokio::io::AsyncWriteExt;
 use bytes::BytesMut;
 use tokio::time::{Duration, sleep};
 
+pub struct HttpResponse {
+    status: u16,
+    version: String,
+    headers: Vec<String>,
+    body: String,
+}
+
+
 pub struct Connection {
     stream: Option<TcpStream>, 
-    buf: BytesMut,
+    buf: Option<BytesMut>,
 }
 
 #[derive(Debug)]
@@ -14,17 +22,9 @@ pub struct HttpRequest {
     method: String,
     uri: String,
     version: String,
-    content_type: Option<String>,
     headers: Vec<String>,
     body: String,
     stream: TcpStream,
-}
-
-pub struct HttpResponse {
-    status: u16,
-    version: String,
-    headers: Vec<String>,
-    body: String,
 }
 
 #[derive(Debug)]
@@ -46,27 +46,23 @@ pub enum RequestError {
 
 impl Connection {
     pub async fn new(stream: TcpStream) -> Self  {
-        let buf = BytesMut::with_capacity(4096);
+        let buf = Some(BytesMut::with_capacity(4096));
         let stream = Some(stream);
         Connection { stream, buf }
     }
 
-    async fn get_bytes(mut self) -> Result<Self, RequestError> {
-        let mut check = false;
+    async fn get_bytes(&mut self) -> Result<&mut Self, RequestError> {
         loop {
-            if self.buf.capacity() > 100000 { return Err(RequestError::PostTooLarge)  }
-            match self.stream.as_mut().unwrap().read_buf(&mut self.buf).await {
+            if self.buf.as_ref().unwrap().capacity() > 100000 { return Err(RequestError::PostTooLarge)  }
+            match self.stream.as_mut().unwrap().read_buf(&mut self.buf.as_mut().unwrap()).await {
                 Ok(_) => {
                     tokio::select! {
-                        _ = sleep(Duration::new(3, 0)) => { 
+                        _ = sleep(Duration::new(8, 0)) => { 
                             return Err(RequestError::Timeout) 
                         }
-                        end = self.check_buf() => {
-                            if end { 
-                                if check || self.buf.len() > 2 && &self.buf[..3] == b"GET" { break }
-                                check = true;
-                                continue;
-                            }
+                        end = self.check_buf() => { 
+                            if end { break } 
+                            continue;
                         }
                     };
                 },
@@ -76,30 +72,10 @@ impl Connection {
         Ok(self)
     }
 
-/*
-    async fn get_length(&self) -> usize {
-        let cursor = self.buf.len() - 15;
-        let lines: Vec<&[u8]> = self.buf[cursor..].split(|x| &[*x] == b"\n" ).collect();
-        for line in lines {
-            let mut line = line.split(|x| *x == b' ').into_iter();
-            if line.next().unwrap() == b"Content-Length" {
-                return line.next().expect("GETIING LENGTH")[0] as usize
-            }
-        }
-        0
-    }
-*/
-
-    pub async fn read_connection(self) -> Result<Self, RequestError>  {
-        let outer = sleep(Duration::new(5, 0));
-
-        let inner = sleep(Duration::new(1, 0));
+    pub async fn read_connection(&mut self) -> Result<&mut Self, RequestError>  {
         tokio::select!{
             // Content-Length header == buf.len()
-            _ = outer => {
-                return Err(RequestError::Timeout)
-            }
-            _ = inner => {
+            _ = sleep(Duration::new(5, 0)) => {
                 return Err(RequestError::Timeout)
             }
             read = self.get_bytes() => {
@@ -109,8 +85,7 @@ impl Connection {
     }
 
     async fn check_buf(&self) -> bool {
-        println!("{:?}", &self.buf[self.buf.len()-4..]);
-        if self.buf.len() > 3 && &self.buf[self.buf.len()-4..] == b"\r\n\r\n" { 
+        if self.buf.as_ref().unwrap().len() > 3 && &self.buf.as_ref().unwrap()[self.buf.as_ref().unwrap().len()-4..] == b"\r\n\r\n" { 
             return true
         }
         false
@@ -118,7 +93,8 @@ impl Connection {
 
     pub async fn build_request(&mut self) -> Result<HttpRequest, RequestError> {
 
-        let (request, body): (Vec<&str>, Option<&str>) = match std::str::from_utf8(&self.buf) {
+        let buf = self.buf.take().unwrap();
+        let (request, body): (Vec<&str>, Option<&str>) = match std::str::from_utf8(&buf) {
                     Ok(request) => { 
                     // Separate request and body
                     let vec: Vec<&str> = request.split("\r\n\r\n").collect();
@@ -128,7 +104,8 @@ impl Connection {
                     if let Some(request) = iter.next() { ( request.split("\r\n").collect(), iter.next() ) }
                         else { return Err(RequestError::EmptyRequest) }
                 },
-                // Request was not valid utf8 (post data will be base64 encoded and compressed)
+                // This will change in future, as the body will be parsed by serde with images
+                // stored as Bytes
                 Err(_) => return Err(RequestError::CouldNotParseToString),
         };
 
@@ -152,27 +129,50 @@ impl Connection {
             else { return Err(RequestError::NoVersion) };
 
         // Map on the rest of the request to get the headers 
-        let mut content_type: Option<String> = None;
-        let headers: Vec<String> = request_iter 
-                .map(|header| {
-                    let mut split = header.split(' ').into_iter();
-                    split.next().map(|name| if name == "Content-Type:" { content_type = split.next().map(|num| num.to_string() ) });
-                    header.to_string()
-                }).collect();
+        let mut content_len = 0;
+        let headers: Vec<String> = request_iter.map(|header| { 
+            let mut split = header.split(' ').into_iter();
+            if let Some(header) = split.next() {
+                if header == "Content-Length:" {
+                    match split.next() {
+                        Some(num) => {
+                            if let Ok(num) = num.parse() {
+                                content_len = num;
+                            }
+                        }
+                        None => ()
+                    }
+                }
+            }
+            header.to_string()
+        }).collect();
 
-        let body: String = if let Some(body) = body { body.to_string() }
-            else { "".to_string() };
+        let body: String = if let Some(body) = body {
+            if body.len() > content_len {
+                self.buf = Some(BytesMut::with_capacity(4096));
+                match self.get_bytes().await {
+                    Ok(more) => {
+                        body.to_string().push_str( 
+                            if let Ok(string) = std::str::from_utf8(&more.buf.take().unwrap()) { string }
+                                else { return Err(RequestError::CouldNotParseToString) }
+                        );
+                        body.to_string()
+                    },
+                    Err(_) => return Err(RequestError::ConnectionClosed) 
+                }
+            } else { body.to_string() }
+        } else { "".to_string() };
 
         let stream = self.stream.take().unwrap();
-        Ok(HttpRequest{method , uri, version, content_type, headers, body, stream })
+        Ok(HttpRequest {method , uri, version, headers, body, stream })
     }
 
 }
 
 impl HttpRequest {
     
-    pub async fn build(method: String, uri: String, version: String, content_type: Option<String>, headers: Vec<String>, body: String, stream: TcpStream ) -> HttpRequest {
-        HttpRequest { method , uri, version, content_type, headers, body, stream }
+    pub async fn build(method: String, uri: String, version: String, headers: Vec<String>, body: String, stream: TcpStream ) -> HttpRequest {
+        HttpRequest { method , uri, version, headers, body, stream }
     }
 
     pub fn body(&self) -> String {
@@ -207,7 +207,5 @@ mod tests {
         
         // The request:- HttpRequest { method: "GET", uri: "/api", version: "HTTP/1.1", headers: ["Host: localhost:9000"], body: Some(""), stream: Take { inner: PollEvented { io: Some(TcpStream { addr: 127.0.0.1:9000, peer: 127.0.0.1:49164, fd: 10 }) }, limit_: 0 } })
     }
-
-
 }
 
