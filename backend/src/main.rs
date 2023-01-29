@@ -2,7 +2,7 @@ use tokio::{
     io::Result,
     net::{ TcpListener, TcpStream},
 };
-use backend::Connection;
+use backend::parse_connection::Connection;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -34,7 +34,7 @@ async fn handle_connection(stream: TcpStream) {
         .build_request().await.expect("Unwrapping request in main");
 
     request.write().await.unwrap();
-    // if Err { serve <CorrespondingErr>_page}
-    //      else { carry on... }
+
+    println!("{:?}", request);
 
 }
