@@ -1,0 +1,14 @@
+/home/solly/code/rust/reports-app/target/debug/deps/frunk_core-207bd13f838d10da.rmeta: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/macros.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/coproduct.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/generic.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/hlist.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/indices.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/labelled.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/path.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/traits.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/tuples.rs
+
+/home/solly/code/rust/reports-app/target/debug/deps/frunk_core-207bd13f838d10da.d: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/macros.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/coproduct.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/generic.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/hlist.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/indices.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/labelled.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/path.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/traits.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/tuples.rs
+
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/lib.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/macros.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/coproduct.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/generic.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/hlist.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/indices.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/labelled.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/path.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/traits.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/frunk_core-0.4.1/src/tuples.rs:

@@ -1,0 +1,12 @@
+/home/solly/code/rust/reports-app/target/debug/deps/subprocess-373c2237610eef60.rmeta: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/builder.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/communicate.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/popen.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/posix.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/os_common.rs
+
+/home/solly/code/rust/reports-app/target/debug/deps/libsubprocess-373c2237610eef60.rlib: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/builder.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/communicate.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/popen.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/posix.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/os_common.rs
+
+/home/solly/code/rust/reports-app/target/debug/deps/subprocess-373c2237610eef60.d: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/builder.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/communicate.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/popen.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/posix.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/os_common.rs
+
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/lib.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/builder.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/communicate.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/popen.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/posix.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/subprocess-0.2.9/src/os_common.rs:

@@ -1,0 +1,11 @@
+/home/solly/code/rust/reports-app/target/debug/deps/lexical_parse_integer-f3af6d86f2bf52cc.rmeta: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/shared.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/algorithm.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/compact.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/options.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/parse.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/api.rs
+
+/home/solly/code/rust/reports-app/target/debug/deps/lexical_parse_integer-f3af6d86f2bf52cc.d: /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/lib.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/shared.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/algorithm.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/compact.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/options.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/parse.rs /home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/api.rs
+
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/lib.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/shared.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/algorithm.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/compact.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/options.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/parse.rs:
+/home/solly/.cargo/registry/src/github.com-1ecc6299db9ec823/lexical-parse-integer-0.8.6/src/api.rs:
