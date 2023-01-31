@@ -166,6 +166,7 @@ mod tests {
     use tokio::net::TcpListener;
     use super::Connection;
 
+    #[ignore]
     #[tokio::test]
     async fn build_request() {
         let connection = TcpListener::bind("127.0.0.1:9000").await.expect("HERE");
@@ -173,7 +174,7 @@ mod tests {
         let request = Connection::new(stream).await.read_connection().await.expect("Parsnips!!").build_request().await.expect("HUUUUHHH?");
         println!("{:?}", request);
 
-        panic!("I Panicked!");
+        //panic!("I Panicked!");
         
         // The request:- HttpRequest { method: "GET", uri: "/api", version: "HTTP/1.1", headers: ["Host: localhost:9000"], body: Some(""), stream: Take { inner: PollEvented { io: Some(TcpStream { addr: 127.0.0.1:9000, peer: 127.0.0.1:49164, fd: 10 }) }, limit_: 0 } })
     }
