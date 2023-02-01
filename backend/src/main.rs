@@ -2,7 +2,11 @@ use tokio::{
     io::Result,
     net::{ TcpListener, TcpStream},
 };
-use backend::parse_connection::Connection;
+use backend::{
+    parse_connection::Connection,
+    HttpResponse,
+};
+
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -30,11 +34,14 @@ async fn main() -> Result<()> {
 async fn handle_connection(stream: TcpStream) {
 
     println!("Got Task! Executing...");
-    let mut request = Connection::new(stream).await.read_connection().await.expect("Unwrapping connection in main")
+    let request = Connection::new(stream).await.read_connection().await.expect("Unwrapping connection in main")
         .build_request().await.expect("Unwrapping request in main");
 
-    request.write().await.unwrap();
+    let response = HttpResponse::build(request).await;
 
-    println!("{:?}", request);
+    match response {
+        Ok((response, stream)) => { response.write(stream).await.expect("COULD NOT WRITE TO STREAM"); return println!("OK") },
+        Err(err) => return println!("{:?}", err),
+    }
 
 }

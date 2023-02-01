@@ -57,11 +57,6 @@ impl HttpRequest {
         HttpRequest { method , uri, version, headers, body, stream }
     }
 
-    pub async fn write(&mut self) -> tokio::io::Result<()> {
-        let response = b"HTTP/1.1 200 OK\r\n\r\n";
-        self.stream.write_all(response).await
-    }
-
     fn cookie(&self) -> Option<()> {
         let cookie = for header in &self.headers {
             let mut header = header.split(' ');
@@ -113,29 +108,39 @@ impl HttpRequest {
 
 impl HttpResponse {
 
-    pub async fn build<T: Serialize>(request: HttpRequest) -> Result<(HttpResponse, TcpStream), BadRequest> {
+    pub async fn build(request: HttpRequest) -> Result<(HttpResponse, TcpStream), BadRequest> {
         match request.method.as_str() {
             "GET" => HttpResponse::get(request).await,
             "POST" => HttpResponse::post(request).await,
-            _ =>  Err(BadRequest::NotFound(HttpResponse { status: "404 Not Found".to_string(), version: "HTTP/1.1".to_string(), headers: vec!["Content-Length: 0".to_string()], body: "".to_string() })),
+            _ => {
+                println!("404 METHOD");
+                Err(BadRequest::NotFound(HttpResponse { status: "404 Not Found".to_string(), version: "HTTP/1.1".to_string(), headers: vec!["Content-Length: 0".to_string()], body: "".to_string() }))
+            },
         }
     }
 
     async fn get(request: HttpRequest) -> Result<(HttpResponse, TcpStream), BadRequest> {
         let mut uri = request.uri.split('/');
+        uri.next();
         /*
             /<school_name>/<teacher_name>/<pupil>, <class>/<id>/info, reports/<subject>/ <- if reports
             /<school_name>/<teacher_name>/(params:-)<pupil, class>+<id>+<info, reports>+<subject>+<term> <- if reports
         */
         let (school, teacher) = if let (Some(school), Some(teacher)) = (uri.next(), uri.next()) { (school, teacher) } 
-            else { return Err(BadRequest::Login(HttpResponse { status: "404 Not Found".to_string(), version: "HTTP/1.1".to_string(), headers: vec!["Content-Length: 0".to_string()], body: "".to_string() }) ) };
+            else { 
+                println!("404 school teacher");
+                return Err(BadRequest::Login(HttpResponse { status: "404 Not Found".to_string(), version: "HTTP/1.1".to_string(), headers: vec!["Content-Length: 0".to_string()], body: "".to_string() }) ) 
+            };
 
         let params = uri.next().map(|params| params.split('+'));
 
         let body = if let Some(mut params) = params {
             match params.next().expect("SPLITTING PARAMS") {
                 "class" => request.class(school, teacher, params).await,
-                _ =>  return Err(BadRequest::NotFound(HttpResponse { status: "404 Not Found".to_string(), version: "HTTP/1.1".to_string(), headers: vec!["Content-Length: 0".to_string()], body: "".to_string() })),
+                _ => {
+                    println!("404 in BODY"); 
+                    return Err(BadRequest::NotFound(HttpResponse { status: "404 Not Found".to_string(), version: "HTTP/1.1".to_string(), headers: vec!["Content-Length: 0".to_string()], body: "".to_string() }))
+                },
             }
         } else { request.home(school, teacher).await };
 
