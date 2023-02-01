@@ -3,8 +3,9 @@ use mysql_async::{
     Conn,
     Error,
 };
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Report {
     pupil_id: usize,
     name: String,
@@ -13,10 +14,13 @@ pub struct Report {
     content: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Reports {
     reports: Vec<Report>,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Home;
 
 #[derive(Debug)]
 pub struct SubjectQuery {
@@ -34,6 +38,7 @@ pub struct Subject {
     name: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Pupil {
     id: usize,
     first_name: String,
@@ -42,17 +47,57 @@ pub struct Pupil {
     class: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Pupils {
     pupils: Vec<Pupil>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Class {
     name: String,
+    pupils: Option<Vec<usize>>
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Classes {
+    teacher: String,
+    classes: Option<Vec<Class>>,
+}
+
+pub struct DB {
+    conn: mysql_async::Conn,
+}
+
+impl Classes {
+    pub fn new(teacher: String) -> Classes {
+        Classes { teacher, classes: None }
+    }
+}
+
+impl DB {
+    pub async fn new() -> Result<DB, Error> {
+        let database_url =  "mysql://solly:Sollyb123@localhost:3306/rust_test";
+        let pool = mysql_async::Pool::new(database_url);
+        let conn = pool.get_conn().await.expect("HERE UPDATE");
+        Ok(DB { conn })
+    }
+
+    pub fn conn(self) -> Conn {
+        self.conn
+    }
 }
 
 impl Class {
     pub fn new(name: String) -> Class {
-        Class { name }
+        Class { name, pupils: None }
+    }
+
+    pub async fn pupils(&self, mut conn: Conn) -> Result<Pupils, Error> {
+        let pupils = format!(r"select * from Class_{}", self.name)
+            .with(())
+            .map(&mut conn, |(id, first_name, last_name, birthdate, class)| Pupil {id, first_name, last_name, birthdate, class})
+            .await?;
+        Ok(Pupils::new(pupils))
     }
 
     pub async fn add_class(&self, mut conn: Conn) -> Result<(), Error> {
@@ -61,6 +106,7 @@ impl Class {
 
         Ok(())
     }
+
     // creates a table for the new class and adds Class to Classes table
     async fn new_class_table(&self, conn: &mut Conn) -> Result<(), Error> {
         let new_table = &format!(r"create table Class_{} (pupil_id int not null, name varchar(30) not null)", self.name) as &str;
@@ -98,23 +144,32 @@ impl Class {
         Ok(())
     }
 
-    pub async fn get_reports(&self, mut conn: Conn, subject: &str, term: &str) -> Result<Reports, mysql_async::Error> {
+    async fn reports_query(&self, conn: &mut Conn, subject: &str, term: &str, class_query: &Vec<ClassQuery>, subject_queries: &mut Vec<(SubjectQuery, String)>) -> Result<(), Error> {
+
+        for query in class_query {
+            let mut subject_query = format!(r"select pupil_id, pupil_name, {} from {} where pupil_id = {}", term, subject, query.pupil_id)
+                .with(()).map(&mut *conn, |(pupil_id, name, report)| SubjectQuery { pupil_id, name, report }).await?;
+            if let Some(query) = subject_query.pop() { subject_queries.push((query, term.to_string())) }
+        }
+        Ok(())
+    }
+
+    pub async fn reports(&self, mut conn: Conn, subject: &str, terms: Vec<&str>) -> Result<Reports, mysql_async::Error> {
         let class_query = &format!(r"select pupil_id, name from Class_{}", self.name).as_str()
             .with(()).map(&mut conn, |(pupil_id, _name )| ClassQuery { pupil_id, _name } ).await?;
 
-        let mut subject_queries: Vec<SubjectQuery> = vec![];
-        for query in class_query {
-            let mut subject_query = format!(r"select pupil_id, pupil_name, {} from {} where pupil_id = {}", term, subject, query.pupil_id)
-                .with(()).map(&mut conn, |(pupil_id, name, report)| SubjectQuery { pupil_id, name, report }).await?;
-            if let Some(query) = subject_query.pop() { subject_queries.push(query) }
+        let mut subject_queries: Vec<(SubjectQuery, String)> = vec![];
+        for term in terms {
+            self.reports_query(&mut conn, subject, term, class_query, &mut subject_queries).await?;
         }
 
         Ok(Reports::new(subject_queries.into_iter().map(|query| {
+            let (term, query) = (query.1, query.0);
             Report {
                 pupil_id: query.pupil_id,
                 name: query.name,
                 subject: subject.to_string(),
-                term: term.to_string(),
+                term,
                 content: query.report,
             }
         }).collect()))
@@ -154,6 +209,9 @@ impl Pupil {
             }).ignore(&mut conn).await?;
 
         Ok(())
+    }
+    pub async fn reports(&self, subject: &str) -> Result<Reports, Error> {
+        todo!()
     }
 }
 
